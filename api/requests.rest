@@ -1,1 +1,14 @@
 GET http://localhost:3000/todos
+
+###
+POST http://localhost:3000/todos/new
+Content-Type: application/json
+
+
+
+###
+DELETE http://localhost:3000/todos/delete/64b2c50fc101882d9d999946
+
+
+###
+PUT http://localhost:3000/todos/complete/64b2c512c101882d9d999948

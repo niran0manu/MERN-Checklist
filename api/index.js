@@ -32,10 +32,42 @@ main().catch(err => console.log(err));
 app.get('/todos',  async (req, res) => {
   const todos = await Todo.find();
   res.json(todos) 
-  // https://youtu.be/R81g-2r6ynM?t=764
+  
 });
 
-app.get('/todos/new', async (req, res) => { });
+app.post('/todos/new', async (req, res) => { 
+  const todo = new Todo({
+      text: req.body.text
+  });
+  todo.save();
+  res.json(todo);
+});
+
+app.delete('/todos/delete/:id', async (req, res) => {
+  const todoId = req.params.id;
+
+  try {
+    const result = await Todo.findByIdAndDelete(todoId);
+    res.json(result);
+  } catch (error) {
+    res.status(500).send('Error deleting todo');
+  }
+});
+
+app.put('/todos/complete/:id', async (req, res) => {
+  const todoId = req.params.id;
+
+  try {
+    const todo = await Todo.findById(todoId);
+    todo.completed = !todo.completed;
+    await todo.save();
+    res.json(todo);
+    
+  } catch (error) {
+    res.status(500).send('Error completing todo');
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`)
