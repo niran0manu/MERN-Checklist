@@ -10,6 +10,7 @@ const Todo = require('./models/todo');
 
 // middleware to parse JSON bodies in POST requests
 app.use(express.json());
+
 app.use(cors());
 
 async function main() {
@@ -48,11 +49,17 @@ app.delete('/todos/delete/:id', async (req, res) => {
 
   try {
     const result = await Todo.findByIdAndDelete(todoId);
-    res.json(result);
+
+    if (result) {
+      res.json(result);
+    } else {
+      res.status(200).send('Todo deleted successfully');
+    }
   } catch (error) {
     res.status(500).send('Error deleting todo');
   }
 });
+
 
 app.put('/todos/complete/:id', async (req, res) => {
   const todoId = req.params.id;
